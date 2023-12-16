@@ -1,0 +1,6 @@
+Add texture loader to handle lifecycle of textures and cache them
+Add groovy script component so we can add behaviour to our entities
+Introduce layers and render per layer (Add depth buffer)
+Add Box2D to handle physics
+Add particles when player looses or ball gets lost
+Add challenges
