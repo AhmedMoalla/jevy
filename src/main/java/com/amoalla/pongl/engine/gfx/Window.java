@@ -21,7 +21,7 @@ import static org.lwjgl.system.MemoryUtil.NULL;
 
 @Getter
 @Accessors(fluent = true)
-public class Window implements AutoCloseable {
+public class Window {
 
     private final int width;
     private final int height;
@@ -36,7 +36,7 @@ public class Window implements AutoCloseable {
         }
 
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
         glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
@@ -89,13 +89,12 @@ public class Window implements AutoCloseable {
         return glfwGetKey(handle, key) == GLFW_PRESS;
     }
 
-    @Override
     public void close() {
         glfwSetWindowShouldClose(handle, true);
     }
 
     private void center() {
-        try ( MemoryStack stack = stackPush() ) {
+        try (MemoryStack stack = stackPush()) {
             IntBuffer pWidth = stack.mallocInt(1);
             IntBuffer pHeight = stack.mallocInt(1);
 

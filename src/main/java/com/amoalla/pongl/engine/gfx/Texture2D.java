@@ -4,6 +4,7 @@ import com.amoalla.pongl.engine.gfx.stb.JSTBImage;
 import com.amoalla.pongl.engine.gfx.stb.LoadResult;
 import lombok.Getter;
 import lombok.experimental.Accessors;
+import org.lwjgl.opengl.GL;
 import org.lwjgl.system.MemoryStack;
 
 import java.awt.*;
@@ -44,7 +45,23 @@ public class Texture2D implements AutoCloseable {
         }
     }
 
+    // Do this because OpenGL45 is unsupported on M1 Macs
     private int createTexture(TextureFormat format) {
+        if (GL.getCapabilities().OpenGL45) {
+            return createTextureGL45(format);
+        } else {
+            int textureId = glGenTextures();
+            glBindTexture(GL_TEXTURE_2D, textureId);
+
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+            return textureId;
+        }
+    }
+
+    private int createTextureGL45(TextureFormat format) {
         int textureId = glCreateTextures(GL_TEXTURE_2D);
         glTextureStorage2D(textureId, 1, format.glInternalFormat, width, height);
 
@@ -57,7 +74,21 @@ public class Texture2D implements AutoCloseable {
     }
 
     private void setData(ByteBuffer data) {
-        glTextureSubImage2D(id, 0, 0, 0, width, height, format.glDataFormat, GL_UNSIGNED_BYTE, data);
+        if (GL.getCapabilities().OpenGL45) {
+            glTextureSubImage2D(id, 0, 0, 0, width, height, format.glDataFormat, GL_UNSIGNED_BYTE, data);
+        } else {
+            glBindTexture(GL_TEXTURE_2D, id);
+            glTexImage2D(GL_TEXTURE_2D, 0, format.glInternalFormat, width, height, 0, format.glDataFormat, GL_UNSIGNED_BYTE, data);
+        }
+    }
+
+    public void bind() {
+        if (GL.getCapabilities().OpenGL45) {
+            glBindTextureUnit(0, id);
+        } else {
+            glActiveTexture(GL_TEXTURE0);
+            glBindTexture(GL_TEXTURE_2D, id);
+        }
     }
 
     @Override

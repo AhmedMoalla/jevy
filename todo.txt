@@ -1,6 +1,14 @@
 Add texture loader to handle lifecycle of textures and cache them
 Add groovy script component so we can add behaviour to our entities
 Introduce layers and render per layer (Add depth buffer)
-Add Box2D to handle physics
+Add Box2D to handle physics:
+    - Add a debug renderer for Box2D using LWJGL
+    - Make the debug renderer a batch renderer
+    - Create a library based on Box2D native library using JNI based on gdx-box2d
 Add particles when player looses or ball gets lost
 Add challenges
+Check this breakout game developed in bevy and try to implement the patterns used in the engine
+https://github.com/bevyengine/bevy/blob/latest/examples/games/breakout.rs
+
+to debug:
+-javaagent:/Users/work/Documents/workspaces/gamedev/pongl/lwjglx-debug-1.0.0.jar=t;o=trace.log

@@ -1,6 +1,6 @@
-package com.amoalla.pongl.engine.core.ecs.systems;
+package com.amoalla.pongl.engine.ecs.systems;
 
-import com.amoalla.pongl.engine.core.ecs.components.Script;
+import com.amoalla.pongl.engine.ecs.components.ScriptComponent;
 import dev.dominion.ecs.api.Dominion;
 import lombok.RequiredArgsConstructor;
 
@@ -11,7 +11,7 @@ public class ScriptExecutionSystem implements Runnable {
 
     @Override
     public void run() {
-        ecs.findEntitiesWith(Script.class)
+        ecs.findEntitiesWith(ScriptComponent.class)
                 .forEach(script -> script.comp().script().accept(script.entity()));
     }
 }

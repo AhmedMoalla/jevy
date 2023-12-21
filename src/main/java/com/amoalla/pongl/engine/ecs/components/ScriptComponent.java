@@ -1,9 +1,9 @@
-package com.amoalla.pongl.engine.core.ecs.components;
+package com.amoalla.pongl.engine.ecs.components;
 
 import dev.dominion.ecs.api.Entity;
 
 import java.util.function.Consumer;
 
 // TODO replace when Groovy script implemented
-public record Script(Consumer<Entity> script) {
+public record ScriptComponent(Consumer<Entity> script) {
 }
