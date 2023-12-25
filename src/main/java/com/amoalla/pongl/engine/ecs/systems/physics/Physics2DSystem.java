@@ -14,6 +14,8 @@ import static com.amoalla.pongl.engine.ecs.systems.physics.ConversionUtils.toGdx
 @Accessors(fluent = true)
 public class Physics2DSystem implements Runnable {
 
+    public static final int PPM = 16;
+
     private final static float TIME_STEP = 1 / 60f;
     private final static int VELOCITY_ITERATIONS = 6, POSITION_ITERATIONS = 2;
     public static final Vector2f GRAVITY = new Vector2f(0, 10);
@@ -22,19 +24,15 @@ public class Physics2DSystem implements Runnable {
     private final World world;
 
     private final Dominion ecs;
-    private final float widthInPixels;
-    private final float heightInPixels;
     private boolean initialized = false;
 
-    public Physics2DSystem(Dominion ecs, Vector2f gravity, float widthInPixels, float heightInPixels) {
+    public Physics2DSystem(Dominion ecs, Vector2f gravity) {
         this.ecs = ecs;
-        this.widthInPixels = widthInPixels;
-        this.heightInPixels = heightInPixels;
         world = new World(toGdxVec2(gravity), true);
     }
 
-    public Physics2DSystem(Dominion ecs, float widthInPixels, float heightInPixels) {
-        this(ecs, GRAVITY, widthInPixels, heightInPixels);
+    public Physics2DSystem(Dominion ecs) {
+        this(ecs, GRAVITY);
     }
 
     public void init() {
@@ -48,10 +46,11 @@ public class Physics2DSystem implements Runnable {
             body.setUserData(entity.get(EntityNameComponent.class).name());
             rigidBody.body(body);
 
+            Vector2f scale = transform.scale().div(PPM, new Vector2f());
             if (entity.has(BoxCollider2DComponent.class)) {
                 BoxCollider2DComponent collider = entity.get(BoxCollider2DComponent.class);
                 PolygonShape shape = new PolygonShape();
-                shape.setAsBox(collider.size().x * transform.scale().x, collider.size().y * transform.scale().y, toGdxVec2(collider.offset()), 0);
+                shape.setAsBox(collider.size().x * scale.x, collider.size().y * scale.y, toGdxVec2(collider.offset()), 0);
 
                 FixtureDef fixtureDef = new FixtureDef();
                 fixtureDef.shape = shape;
@@ -59,7 +58,6 @@ public class Physics2DSystem implements Runnable {
                 fixtureDef.friction = collider.friction();
                 fixtureDef.restitution = collider.restitution();
                 Fixture fixture = body.createFixture(fixtureDef);
-                fixture.setUserData(new Vector2f(collider.size().x * transform.scale().x, collider.size().y * transform.scale().y));
                 collider.fixture(fixture);
                 shape.dispose();
             }
@@ -68,7 +66,7 @@ public class Physics2DSystem implements Runnable {
 
                 CircleShape shape = new CircleShape();
                 shape.setPosition(toGdxVec2(collider.offset()));
-                shape.setRadius(transform.scale().x * collider.radius());
+                shape.setRadius(scale.x * collider.radius());
 
                 FixtureDef fixtureDef = new FixtureDef();
                 fixtureDef.shape = shape;
@@ -90,7 +88,7 @@ public class Physics2DSystem implements Runnable {
         bodyDef.type = rigidBody.type();
         bodyDef.fixedRotation = rigidBody.fixedRotation();
         bodyDef.angle = transform.rotationAngle();
-        bodyDef.position.set(position.x, position.y);
+        bodyDef.position.set(position.x / PPM, position.y / PPM);
         return world.createBody(bodyDef);
     }
 
@@ -106,7 +104,7 @@ public class Physics2DSystem implements Runnable {
 
             Body body = rigidBody.body();
             Vector2 position = body.getPosition();
-            transform.translation().set(position.x, position.y);
+            transform.translation().set(position.x * PPM, position.y * PPM);
             transform.rotationAngle(body.getAngle());
         }
     }

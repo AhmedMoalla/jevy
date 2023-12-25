@@ -16,6 +16,7 @@ import org.joml.Vector2f;
 import java.awt.*;
 
 import static com.amoalla.pongl.engine.util.Constants.VECTOR_Y_COMPONENT;
+import static com.amoalla.pongl.engine.util.Constants.ZERO;
 import static org.joml.Math.toRadians;
 import static org.lwjgl.glfw.GLFW.*;
 
@@ -27,7 +28,17 @@ public class Main extends GameAdapter {
     public void init(Context context) {
         super.init(context);
 
+        //Layer bgLayer = new BackgroundLayer();
+        //Layer gameLayer = new GameLayer();
+
+        // Should be in the background layer
         Texture2D background = new Texture2D("/textures/background.jpg");
+        Vector2f bgSize = new Vector2f(window.width(), window.height());
+        ecs.createEntity(
+                new EntityNameComponent("Background"),
+                new Transform2DComponent(ZERO, bgSize),
+                new SpriteComponent(background)
+        );
 
         Texture2D paddleTexture = new Texture2D("/textures/paddle.png");
         Vector2f size = new Vector2f(100, 20);
@@ -35,7 +46,7 @@ public class Main extends GameAdapter {
 
         ecs.createEntity(
                 new EntityNameComponent("Paddle"),
-                new Transform2DComponent(position, size, toRadians(90)),
+                new Transform2DComponent(position, size, toRadians(0)),
                 new SpriteComponent(paddleTexture),
                 new RigidBody2DComponent(BodyType.KinematicBody),
                 new BoxCollider2DComponent());
@@ -50,59 +61,6 @@ public class Main extends GameAdapter {
                     new CircleCollider2DComponent()
             );
         }
-
-        Vector2f bgSize = new Vector2f(window.width(), window.height());
-//        ecs.createEntity(
-//                new EntityNameComponent("Background"),
-//                new Transform2DComponent(ZERO, bgSize),
-//                new SpriteComponent(background)
-//        );
-
-//        ecs.createEntity(
-//                new EntityNameComponent("Floor"),
-//                new Transform2DComponent(new Vector2f(window.width() / 2f, window.height()), new Vector2f(window.width(), 1)),
-//                new RigidBody2DComponent(),
-//                new BoxCollider2DComponent()
-//        );
-//
-//        float platformWidth = 500;
-//        float platformSpacing = 50;
-//        for (int i = 0; i < 4; i++) {
-//            ecs.createEntity(
-//                    new EntityNameComponent(STR."Platform \{i}"),
-//                    new Transform2DComponent(new Vector2f(window.width() / 2f, window.height() / 2f + platformSpacing * i), new Vector2f(platformWidth, 3)),
-//                    new RigidBody2DComponent(),
-//                    new BoxCollider2DComponent()
-//            );
-//        }
-//
-//        int numPerRow = 25;
-//        for (int i = 0; i < 4; i++) {
-//            for (int j = 0; j < numPerRow; j++) {
-//                float platformX = window.width() / 2f - platformWidth / 2f;
-//                float platformY = window.height() / 2f + platformSpacing * i;
-//                float dominoWidth = (platformWidth / 3f) / numPerRow;
-//                float dominoHeight = 35;
-//                float spacing = (platformWidth * (2 / 3f)) / numPerRow;
-//                var pos = new Vector2f(platformX + (dominoWidth / 2) + (j * (dominoWidth + spacing)), platformY - (dominoHeight / 2));
-//                Transform2DComponent transform;
-//                if (i == 2 && j == 0) {
-//                    transform = new Transform2DComponent(pos.add(-5, 0), new Vector2f(dominoWidth, dominoHeight), 0.5f);
-//                    } else if (i == 3 && j == numPerRow - 1) {
-//                    transform = new Transform2DComponent(pos.add(5, 0), new Vector2f(dominoWidth, dominoHeight), -0.5f);
-//                    } else
-//                        transform = new Transform2DComponent(pos, new Vector2f(dominoWidth, dominoHeight));
-//
-//                ecs.createEntity(
-//                        new EntityNameComponent(STR."Domino \{i},\{j}"),
-//                        transform,
-//                        new RigidBody2DComponent(BodyType.DynamicBody),
-//                        new BoxCollider2DComponent()
-//                                .density(25)
-//                                .friction(.5f)
-//                );
-//            }
-//        }
     }
 
     @Override

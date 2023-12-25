@@ -4,17 +4,18 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.physics.box2d.joints.PulleyJoint;
 import com.badlogic.gdx.utils.Array;
+import org.joml.Matrix4f;
 
 import java.awt.*;
 
-public class PhysicsRenderer {
+import static com.amoalla.pongl.engine.ecs.systems.physics.Physics2DSystem.PPM;
+
+public class PhysicsDebugRenderer {
 
     private final Array<Body> bodies = new Array<>();
     private final static Array<Joint> joints = new Array<Joint>();
 
     private final Vector2[] vertices = new Vector2[1000];
-    private int width;
-    private int height;
 
     private boolean drawBodies;
     private boolean drawJoints;
@@ -23,12 +24,14 @@ public class PhysicsRenderer {
     private boolean drawVelocities;
     private boolean drawContacts;
 
-    public PhysicsRenderer() {
-        this(true, true, false, true, false, true);
+    private final Matrix4f projection;
+
+    public PhysicsDebugRenderer(int width, int height) {
+        this(width, height, true, true, false, true, false, true);
     }
 
-    public PhysicsRenderer(boolean drawBodies, boolean drawJoints, boolean drawAABBs, boolean drawInactiveBodies,
-                           boolean drawVelocities, boolean drawContacts) {
+    public PhysicsDebugRenderer(int width, int height, boolean drawBodies, boolean drawJoints, boolean drawAABBs,
+                                boolean drawInactiveBodies, boolean drawVelocities, boolean drawContacts) {
         for (int i = 0; i < vertices.length; i++)
             vertices[i] = new Vector2();
 
@@ -38,9 +41,13 @@ public class PhysicsRenderer {
         this.drawInactiveBodies = drawInactiveBodies;
         this.drawVelocities = drawVelocities;
         this.drawContacts = drawContacts;
+
+        projection = new Matrix4f()
+                .ortho(0.0f, (float) width / PPM, (float) height / PPM, 0.0f, -1.0f, 1.0f);
     }
 
     public void render(World world, Renderer renderer) {
+        renderer.projection().set(projection);
         if (drawBodies || drawAABBs) {
             world.getBodies(bodies);
             for (Body body : bodies) {

@@ -36,6 +36,8 @@ public class Renderer implements AutoCloseable {
 
     private final Matrix4f model = new Matrix4f();
     @Getter
+    private final Matrix4f defaultProjection;
+    @Getter
     private final Matrix4f projection;
 
     public Renderer(boolean debug, int width, int height) {
@@ -56,13 +58,18 @@ public class Renderer implements AutoCloseable {
             throw new IllegalStateException("Could not load shaders.");
         }
 
-        this.projection = new Matrix4f()
+        this.defaultProjection = new Matrix4f()
                 .ortho(0.0f, width, height, 0.0f, -1.0f, 1.0f);
+        projection = new Matrix4f(defaultProjection);
 
         quadVao = createQuadVao();
         createLineVao();
 //        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
         whiteTexture = new Texture2D(1, 1, Color.WHITE);
+    }
+
+    public void setProjectionDefault() {
+        projection.set(defaultProjection);
     }
 
     public void fill(Color color) {

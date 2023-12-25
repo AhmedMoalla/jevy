@@ -6,11 +6,15 @@ import com.amoalla.pongl.engine.ecs.components.SpriteComponent;
 import com.amoalla.pongl.engine.ecs.components.Transform2DComponent;
 import com.amoalla.pongl.engine.ecs.systems.ScriptExecutionSystem;
 import com.amoalla.pongl.engine.ecs.systems.physics.Physics2DSystem;
-import com.amoalla.pongl.engine.gfx.PhysicsRenderer;
+import com.amoalla.pongl.engine.gfx.PhysicsDebugRenderer;
 import com.amoalla.pongl.engine.gfx.Renderer;
 import com.amoalla.pongl.engine.gfx.Window;
 import dev.dominion.ecs.api.Dominion;
 import dev.dominion.ecs.api.Scheduler;
+
+import java.awt.*;
+import java.util.ArrayDeque;
+import java.util.Deque;
 
 import static org.lwjgl.glfw.GLFW.*;
 
@@ -20,10 +24,11 @@ public class GameRunner implements AutoCloseable {
 
     private final Window window;
     private final Renderer renderer;
-    private PhysicsRenderer physicsRenderer;
+    private PhysicsDebugRenderer physicsRenderer;
     private final Context context;
     private final Dominion ecs = Dominion.create();
     private final Scheduler tickScheduler = ecs.createScheduler();
+    private final Deque<Layer> layers = new ArrayDeque<>();
 
     public GameRunner(GameConfig config) {
         WindowConfig windowConfig = config.window();
@@ -34,7 +39,10 @@ public class GameRunner implements AutoCloseable {
     }
 
     public void run(Game game) {
-        Physics2DSystem physics = new Physics2DSystem(ecs, window.width(), window.height());
+        if (layers.isEmpty()) {
+            // Todo insert default layer
+        }
+        Physics2DSystem physics = new Physics2DSystem(ecs);
         game.init(context);
         physics.init();
         window.setKeyCallback((_, key, scancode, action, mods) -> {
@@ -46,11 +54,12 @@ public class GameRunner implements AutoCloseable {
         });
         tickScheduler.schedule(physics);
         // TODO: Render only if debug is true
-        physicsRenderer = new PhysicsRenderer();
+        physicsRenderer = new PhysicsDebugRenderer(window.width(), window.height());
         tickScheduler.schedule(game::fixedUpdate);
         tickScheduler.tickAtFixedRate(TICKS_PER_SECOND);
         window.loop(() -> {
             game.update();
+            renderer.setProjectionDefault();
             game.render(renderer);
             render();
             physicsRenderer.render(physics.world(), renderer);
@@ -69,21 +78,21 @@ public class GameRunner implements AutoCloseable {
             }
         }
 
-//        int step = 50;
-//        for (int x = 0; x < window.width(); x+=step) {
-//            Color color = Color.WHITE;
-//            if (x == window.width() / 2) {
-//                color = Color.GREEN;
-//            }
-//            renderer.drawLine(x, 0, x, window.height(), color);
-//        }
-//        for (int y = 0; y < window.height(); y+=step) {
-//            Color color = Color.WHITE;
-//            if (y == window.height() / 2) {
-//                color = Color.GREEN;
-//            }
-//            renderer.drawLine(0, y, window.width(), y, color);
-//        }
+        int step = 50;
+        for (int x = 0; x < window.width(); x += step) {
+            Color color = Color.WHITE;
+            if (x == window.width() / 2) {
+                color = Color.GREEN;
+            }
+            renderer.drawLine(x, 0, x, window.height(), color);
+        }
+        for (int y = 0; y < window.height(); y += step) {
+            Color color = Color.WHITE;
+            if (y == window.height() / 2) {
+                color = Color.GREEN;
+            }
+            renderer.drawLine(0, y, window.width(), y, color);
+        }
     }
 
     @Override
