@@ -16,8 +16,8 @@ import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.amoalla.pongl.test.WorldRunner.SCHEDULER_INITIALIZER_PACKAGE;
-import static com.amoalla.pongl.test.WorldRunner.SCHEDULER_INITIALIZER_CLASS_NAME;
+import static com.amoalla.pongl.test.ScheduleInitializer.SCHEDULER_INITIALIZER_CLASS_NAME;
+import static com.amoalla.pongl.test.ScheduleInitializer.SCHEDULER_INITIALIZER_PACKAGE;
 import static javax.lang.model.util.ElementFilter.methodsIn;
 
 // http://hannesdorfmann.com/annotation-processing/annotationprocessing101/
@@ -227,8 +227,8 @@ public class FunctionalSystemProcessor extends AbstractProcessor {
 
     private void updateScheduleInitializer(AnnotatedFunctionalSystem system, TypeSpec systemRunner) {
         scheduleInitializer.initializeBuilder
-                .beginControlFlow("if (schedule == $T.$L)", Schedule.class, system.schedule())
-                .addStatement("$N.addSystems(new $T($N))", scheduleInitializer.schedule,
+                .beginControlFlow("if ($N.label().equals($T.class))", scheduleInitializer.schedule, system.schedule())
+                .addStatement("$N.addSystem(new $T($N))", scheduleInitializer.schedule,
                         ClassName.get(SCHEDULER_INITIALIZER_PACKAGE, systemRunner.name), scheduleInitializer.world)
                 .endControlFlow();
     }

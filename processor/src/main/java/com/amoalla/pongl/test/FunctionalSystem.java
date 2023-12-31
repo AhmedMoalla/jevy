@@ -10,5 +10,6 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.SOURCE)
 public @interface FunctionalSystem {
     String FQN = "com.amoalla.pongl.test.FunctionalSystem";
-    Schedule value() default Schedule.None;
+
+    Class<? extends ScheduleLabel> value() default Default.class;
 }

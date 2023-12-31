@@ -1,23 +1,17 @@
 package com.amoalla.pongl.test;
 
-import java.util.ArrayList;
-import java.util.List;
+public interface Schedule {
+    Class<? extends ScheduleLabel> label();
 
-public enum Schedule {
-    None,
-    Startup,
-    Update;
+    void run(ECSWorld world);
 
-    private final List<SystemRunner> systems = new ArrayList<>();
+    void addSystem(SystemRunner systemRunner);
 
-    public void addSystems(SystemRunner system) {
-        if (this == None) throw new IllegalStateException("Cannot add system to the 'None' schedule.");
-        systems.add(system);
+    static Schedule defaultSchedule() {
+        return new ScheduleImpl(Default.class);
     }
 
-    public void run() {
-        // Run in parallel if possible or build a graph using the dependencies of each system
-        // to decide what to run safely in parallel and what to run sequentially
-        systems.forEach(SystemRunner::run);
+    static Schedule fromLabel(Class<? extends ScheduleLabel> label) {
+        return new ScheduleImpl(label);
     }
 }
