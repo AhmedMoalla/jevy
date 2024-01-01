@@ -1,4 +1,4 @@
-package com.amoalla.pongl.test;
+package com.amoalla.pongl.test.processor;
 
 import javax.lang.model.element.Element;
 

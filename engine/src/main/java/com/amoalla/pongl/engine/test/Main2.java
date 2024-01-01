@@ -26,33 +26,33 @@ public class Main2 {
     public record Update() implements ScheduleLabel { }
 
     @FunctionalSystem(Startup.class)
-    public void simple(CustomResource resource) {
-        System.out.println(STR."[simple][Startup] From system: \{resource}");
+    public void single(CustomResource resource) {
+//        System.out.println(STR."[single][Startup] From system: \{resource}");
     }
 
     @FunctionalSystem(Startup.class)
-    public void setup(CustomResource resource, Query2<Position, EntityName> query) {
-        System.out.println(STR."[setup][Startup] From system: \{resource}");
-        query.stream().forEach(comps -> System.out.println("[setup][Startup] All Entities: " + comps.comp1() + " + " + comps.comp2()));
+    public void all(CustomResource resource, Query2<Position, EntityName> query) {
+//        System.out.println(STR."[all][Startup] From system: \{resource}");
+        query.stream().forEach(comps -> System.out.println("[all][Startup] All Entities: " + comps.comp1() + " + " + comps.comp2()));
     }
 
     @FunctionalSystem(Update.class)
-    public void update(CustomResource resource,
+    public void marked(CustomResource resource,
                        AnotherResource another,
                        @Filter(with = MarkedEntity.class) Query1<EntityName> query) {
-        System.out.println(STR."[update][Update] From system: \{resource}");
-        System.out.println(STR."[update][Update] From system: \{another}");
-        query.stream().forEach(comps -> System.out.println("[update][Update] Marked Entities: " + comps));
+//        System.out.println(STR."[marked][Update] From system: \{resource}");
+//        System.out.println(STR."[marked][Update] From system: \{another}");
+        query.stream().forEach(comps -> System.out.println("[marked][Update] Marked Entities: " + comps));
     }
 
     @FunctionalSystem(Update.class)
-    public void another(@Filter(without = Alive.class) Query1<EntityName> query) {
-        query.stream().forEach(comps -> System.out.println("[another][Update] Without Alive Entities: " + comps));
+    public void notAlive(@Filter(without = Alive.class) Query1<EntityName> query) {
+        query.stream().forEach(comps -> System.out.println("[notAlive][Update] Without Alive Entities: " + comps));
     }
 
     @FunctionalSystem(Update.class)
-    public void anothera(@Filter(with = MarkedEntity.class, without = Alive.class) Query1<EntityName> query) {
-        query.stream().forEach(comps -> System.out.println("[anothera][Update] Without Alive Marked Entities: " + comps));
+    public void markedNotAlive(@Filter(with = MarkedEntity.class, without = Alive.class) Query1<EntityName> query) {
+        query.stream().forEach(comps -> System.out.println("[markedNotAlive][Update] Without Alive Marked Entities: " + comps));
     }
 
     public static class AnotherResource {
