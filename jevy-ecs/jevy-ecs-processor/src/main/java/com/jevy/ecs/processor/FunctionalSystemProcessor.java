@@ -71,8 +71,8 @@ public class FunctionalSystemProcessor extends AbstractProcessor {
                 file.writeTo(filer);
             }
 
-            new SchedulerInitializerGenerator()
-                    .generate(systems)
+            new SchedulerInitializerGenerator(systems)
+                    .generate()
                     .writeTo(filer);
             return true;
         }
