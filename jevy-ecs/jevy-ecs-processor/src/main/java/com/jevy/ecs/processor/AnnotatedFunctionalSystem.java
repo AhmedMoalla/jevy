@@ -2,6 +2,7 @@ package com.jevy.ecs.processor;
 
 import com.jevy.ecs.Query;
 import com.jevy.ecs.annotation.FunctionalSystem;
+import com.jevy.ecs.annotation.ScanSystems;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.TypeName;
 
@@ -18,6 +19,7 @@ public class AnnotatedFunctionalSystem {
     private final String name;
     private final TypeName schedule;
     private final ClassName enclosingClassName;
+    private final boolean enclosingClassStandalone;
     private final List<? extends VariableElement> parameters;
 
     public AnnotatedFunctionalSystem(ExecutableElement executable) {
@@ -28,6 +30,9 @@ public class AnnotatedFunctionalSystem {
 
         TypeElement enclosingElement = (TypeElement) executable.getEnclosingElement();
         enclosingClassName = ClassName.get(enclosingElement);
+        ScanSystems scanSystems = enclosingElement.getAnnotation(ScanSystems.class);
+        enclosingClassStandalone = scanSystems != null
+                                   && (scanSystems.packageName() == null || scanSystems.packageName().isEmpty());
 
         // TODO check if all parameter classes are public
         parameters = executable.getParameters();
@@ -45,12 +50,17 @@ public class AnnotatedFunctionalSystem {
         return this.enclosingClassName;
     }
 
+    public boolean isEnclosingClassStandalone() {
+        return this.enclosingClassStandalone;
+    }
+
     public List<? extends VariableElement> parameters() {
         return this.parameters;
     }
 
     public String runnerName() {
-        return "%sSystemRunner".formatted(capitalize(name));
+        String className = enclosingClassName.canonicalName().replace(".", "_");
+        return "%s_%s_SystemRunner".formatted(className, capitalize(name));
     }
 
     public boolean hasQuery(Types typeUtils, Elements elementUtils) {

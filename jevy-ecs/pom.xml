@@ -29,7 +29,7 @@
     </dependencyManagement>
 
     <modules>
-        <module>jevy-ecs-annotations</module>
+        <module>jevy-ecs-processor</module>
         <module>jevy-ecs-core</module>
     </modules>
 </project>

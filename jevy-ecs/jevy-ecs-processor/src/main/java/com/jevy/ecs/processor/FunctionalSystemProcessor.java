@@ -3,6 +3,7 @@ package com.jevy.ecs.processor;
 import com.google.auto.service.AutoService;
 import com.jevy.ecs.annotation.Filter;
 import com.jevy.ecs.annotation.FunctionalSystem;
+import com.jevy.ecs.annotation.ScanSystems;
 import com.squareup.javapoet.JavaFile;
 
 import javax.annotation.processing.*;
@@ -46,12 +47,12 @@ public class FunctionalSystemProcessor extends AbstractProcessor {
         } catch (IOException e) {
             error(null, e.getMessage());
         }
-        return true;
+        return false;
     }
 
     @Override
     public Set<String> getSupportedAnnotationTypes() {
-        return Set.of(FunctionalSystem.class, Filter.class)
+        return Set.of(FunctionalSystem.class, Filter.class, ScanSystems.class)
                 .stream().map(Class::getCanonicalName)
                 .collect(Collectors.toSet());
     }
@@ -73,9 +74,10 @@ public class FunctionalSystemProcessor extends AbstractProcessor {
             new SchedulerInitializerGenerator()
                     .generate(systems)
                     .writeTo(filer);
+            return true;
         }
 
-        return true;
+        return false;
     }
 
     private Element checkElementValid(Element element) {

@@ -1,5 +1,7 @@
 package com.jevy.ecs;
 
+import java.util.ServiceLoader;
+
 public interface ScheduleInitializer {
     String SCHEDULER_INITIALIZER_PACKAGE = "com.jevy.ecs";
     String SCHEDULER_INITIALIZER_CLASS_NAME = "DefaultScheduleInitializer";
@@ -8,8 +10,17 @@ public interface ScheduleInitializer {
     void initialize(ECSWorld world, Schedule schedule);
 
     static ScheduleInitializer defaultInitializer() {
+        return ServiceLoader
+                .load(ScheduleInitializer.class)
+                .stream()
+                .filter(p -> !p.type().getName().equals(DEFAULT_INITIALIZER_IMPLEMENTATION_CLASS))
+                .findFirst()
+                .map(ServiceLoader.Provider::get)
+                .orElse(loadDefaultInitializer());
+    }
+
+    private static ScheduleInitializer loadDefaultInitializer() {
         try {
-            // TODO: Switch this with ServiceLoader
             Class<?> clazz = Class.forName(DEFAULT_INITIALIZER_IMPLEMENTATION_CLASS);
             return (ScheduleInitializer) clazz.getDeclaredConstructors()[0].newInstance();
         } catch (ClassNotFoundException e) {

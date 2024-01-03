@@ -8,7 +8,7 @@ public interface Schedule {
     void addSystem(SystemRunner systemRunner);
 
     static Schedule defaultSchedule() {
-        return new ScheduleImpl(Default.class);
+        return new ScheduleImpl(DefaultScheduleLabel.class);
     }
 
     static Schedule fromLabel(Class<? extends ScheduleLabel> label) {
