@@ -1,12 +1,8 @@
 package com.jevy.ecs.annotation;
 
-import com.jevy.ecs.DefaultScheduleLabel;
-import com.jevy.ecs.ScheduleLabel;
+import com.jevy.ecs.schedule.*;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import java.lang.annotation.*;
 
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.SOURCE)

@@ -1,8 +1,8 @@
 package com.jevy.testbed;
 
-import com.jevy.ecs.ECSWorld;
-import com.jevy.ecs.Schedule;
-import com.jevy.ecs.annotation.FunctionalSystem;
+import com.jevy.ecs.*;
+import com.jevy.ecs.annotation.*;
+import com.jevy.ecs.schedule.*;
 import com.jevy.testbed.components.*;
 
 public class GlobalMain {

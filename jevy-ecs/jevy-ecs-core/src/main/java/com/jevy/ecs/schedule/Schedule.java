@@ -1,4 +1,6 @@
-package com.jevy.ecs;
+package com.jevy.ecs.schedule;
+
+import com.jevy.ecs.*;
 
 public interface Schedule {
     Class<? extends ScheduleLabel> label();

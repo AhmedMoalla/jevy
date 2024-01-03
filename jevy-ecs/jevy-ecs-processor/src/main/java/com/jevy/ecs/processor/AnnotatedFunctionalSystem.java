@@ -1,18 +1,13 @@
 package com.jevy.ecs.processor;
 
-import com.jevy.ecs.Query;
-import com.jevy.ecs.annotation.FunctionalSystem;
-import com.jevy.ecs.annotation.ScanSystems;
-import com.squareup.javapoet.ClassName;
-import com.squareup.javapoet.TypeName;
+import com.jevy.ecs.annotation.*;
+import com.jevy.ecs.query.*;
+import com.squareup.javapoet.*;
 
-import javax.lang.model.element.ExecutableElement;
-import javax.lang.model.element.TypeElement;
-import javax.lang.model.element.VariableElement;
-import javax.lang.model.type.MirroredTypeException;
-import javax.lang.model.util.Elements;
-import javax.lang.model.util.Types;
-import java.util.List;
+import javax.lang.model.element.*;
+import javax.lang.model.type.*;
+import javax.lang.model.util.*;
+import java.util.*;
 
 public class AnnotatedFunctionalSystem {
 

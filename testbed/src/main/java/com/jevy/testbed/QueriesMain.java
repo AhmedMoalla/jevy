@@ -1,16 +1,10 @@
 package com.jevy.testbed;
 
-import com.jevy.ecs.ECSWorld;
-import com.jevy.ecs.Query1;
-import com.jevy.ecs.Query2;
-import com.jevy.ecs.Schedule;
-import com.jevy.ecs.annotation.Filter;
-import com.jevy.ecs.annotation.FunctionalSystem;
-import com.jevy.ecs.annotation.ScanSystems;
-import com.jevy.testbed.components.Alive;
-import com.jevy.testbed.components.EntityName;
-import com.jevy.testbed.components.MarkedEntity;
-import com.jevy.testbed.components.Position;
+import com.jevy.ecs.*;
+import com.jevy.ecs.annotation.*;
+import com.jevy.ecs.query.*;
+import com.jevy.ecs.schedule.*;
+import com.jevy.testbed.components.*;
 
 @ScanSystems
 public class QueriesMain {

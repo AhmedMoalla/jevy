@@ -1,13 +1,11 @@
 package com.jevy.testbed;
 
-import com.jevy.ecs.ECSWorld;
-import com.jevy.ecs.EventReader;
-import com.jevy.ecs.EventWriter;
-import com.jevy.ecs.Schedule;
-import com.jevy.ecs.annotation.FunctionalSystem;
-import com.jevy.ecs.annotation.ScanSystems;
+import com.jevy.ecs.*;
+import com.jevy.ecs.annotation.*;
+import com.jevy.ecs.event.*;
+import com.jevy.ecs.schedule.*;
 
-import java.util.random.RandomGenerator;
+import java.util.random.*;
 
 @ScanSystems
 public class EventsMain {

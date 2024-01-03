@@ -1,7 +1,8 @@
-package com.jevy.ecs;
+package com.jevy.ecs.schedule;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.jevy.ecs.*;
+
+import java.util.*;
 
 public class ScheduleImpl implements Schedule {
 

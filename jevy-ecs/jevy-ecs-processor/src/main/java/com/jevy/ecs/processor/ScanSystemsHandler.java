@@ -2,13 +2,12 @@ package com.jevy.ecs.processor;
 
 import com.squareup.javapoet.*;
 
-import javax.lang.model.element.Modifier;
+import javax.lang.model.element.*;
 import java.util.*;
-import java.util.stream.Collectors;
+import java.util.stream.*;
 
-import static com.jevy.ecs.ScheduleInitializer.SCHEDULER_INITIALIZER_PACKAGE;
-import static com.jevy.ecs.processor.SchedulerInitializerGenerator.scheduleParam;
-import static com.jevy.ecs.processor.SchedulerInitializerGenerator.world;
+import static com.jevy.ecs.processor.SchedulerInitializerGenerator.*;
+import static com.jevy.ecs.schedule.ScheduleInitializer.*;
 
 public class ScanSystemsHandler {
 

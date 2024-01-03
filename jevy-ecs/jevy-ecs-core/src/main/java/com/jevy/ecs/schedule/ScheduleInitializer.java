@@ -1,6 +1,8 @@
-package com.jevy.ecs;
+package com.jevy.ecs.schedule;
 
-import java.util.ServiceLoader;
+import com.jevy.ecs.*;
+
+import java.util.*;
 
 public interface ScheduleInitializer {
     String SCHEDULER_INITIALIZER_PACKAGE = "com.jevy.ecs";

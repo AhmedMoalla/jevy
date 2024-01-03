@@ -1,18 +1,15 @@
 package com.jevy.ecs.processor;
 
 
-import com.jevy.ecs.ECSWorld;
-import com.jevy.ecs.Schedule;
-import com.jevy.ecs.ScheduleInitializer;
+import com.jevy.ecs.*;
+import com.jevy.ecs.schedule.*;
 import com.squareup.javapoet.*;
 
-import javax.lang.model.element.Modifier;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+import javax.lang.model.element.*;
+import java.util.*;
+import java.util.stream.*;
 
-import static com.jevy.ecs.ScheduleInitializer.SCHEDULER_INITIALIZER_CLASS_NAME;
-import static com.jevy.ecs.ScheduleInitializer.SCHEDULER_INITIALIZER_PACKAGE;
+import static com.jevy.ecs.schedule.ScheduleInitializer.*;
 
 public class SchedulerInitializerGenerator {
 

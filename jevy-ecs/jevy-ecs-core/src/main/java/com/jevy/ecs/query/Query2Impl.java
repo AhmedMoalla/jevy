@@ -1,9 +1,9 @@
-package com.jevy.ecs;
+package com.jevy.ecs.query;
 
-import dev.dominion.ecs.api.Results;
+import dev.dominion.ecs.api.*;
 
-import java.util.Iterator;
-import java.util.stream.Stream;
+import java.util.*;
+import java.util.stream.*;
 
 public class Query2Impl<T1, T2> implements Query2<T1, T2> {
 

@@ -1,23 +1,21 @@
 package com.jevy.ecs.processor;
 
-import com.google.auto.common.MoreElements;
-import com.jevy.ecs.ECSWorld;
-import com.jevy.ecs.Query;
-import com.jevy.ecs.SystemRunner;
-import com.jevy.ecs.annotation.Filter;
+import com.google.auto.common.*;
+import com.jevy.ecs.*;
+import com.jevy.ecs.annotation.*;
+import com.jevy.ecs.query.*;
 import com.squareup.javapoet.*;
-import dev.dominion.ecs.api.Dominion;
+import dev.dominion.ecs.api.*;
 
-import javax.annotation.processing.ProcessingEnvironment;
+import javax.annotation.processing.*;
 import javax.lang.model.element.*;
-import javax.lang.model.util.Elements;
-import javax.lang.model.util.Types;
+import javax.lang.model.util.*;
 import java.util.*;
-import java.util.stream.Collectors;
+import java.util.stream.*;
 
-import static com.jevy.ecs.ScheduleInitializer.SCHEDULER_INITIALIZER_PACKAGE;
-import static com.jevy.ecs.processor.Utils.getTypeParameters;
-import static javax.lang.model.util.ElementFilter.methodsIn;
+import static com.jevy.ecs.processor.Utils.*;
+import static com.jevy.ecs.schedule.ScheduleInitializer.*;
+import static javax.lang.model.util.ElementFilter.*;
 
 public class SystemRunnerGenerator {
 
