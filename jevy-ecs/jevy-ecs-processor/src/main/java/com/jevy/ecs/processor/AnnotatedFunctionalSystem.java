@@ -2,6 +2,7 @@ package com.jevy.ecs.processor;
 
 import com.jevy.ecs.annotation.*;
 import com.jevy.ecs.query.*;
+import com.jevy.ecs.systemset.*;
 import com.squareup.javapoet.*;
 
 import javax.lang.model.element.*;
@@ -17,6 +18,8 @@ public class AnnotatedFunctionalSystem {
     private final boolean enclosingClassStandalone;
     private final List<? extends VariableElement> parameters;
 
+    private final SystemSetRules rules;
+
     public AnnotatedFunctionalSystem(ExecutableElement executable) {
 
         name = executable.getSimpleName().toString();
@@ -31,6 +34,8 @@ public class AnnotatedFunctionalSystem {
 
         // TODO check if all parameter classes are public
         parameters = executable.getParameters();
+
+        rules = buildSystemSetRules(executable);
     }
 
     public String name() {
@@ -51,6 +56,10 @@ public class AnnotatedFunctionalSystem {
 
     public List<? extends VariableElement> parameters() {
         return this.parameters;
+    }
+
+    public SystemSetRules rules() {
+        return rules;
     }
 
     public String runnerName() {
@@ -89,6 +98,21 @@ public class AnnotatedFunctionalSystem {
         } catch (MirroredTypeException e) {
             return TypeName.get(e.getTypeMirror());
         }
+    }
+
+    private SystemSetRules buildSystemSetRules(ExecutableElement executable) {
+        Order order = executable.getAnnotation(Order.class);
+        if (order == null) {
+            return null;
+        }
+        SystemSetRules.Builder builder = SystemSetRules.builder();
+        for (String after : order.after()) {
+            builder.after(after);
+        }
+        for (String before : order.before()) {
+            builder.before(before);
+        }
+        return builder.build();
     }
 
 }

@@ -5,6 +5,8 @@ import java.util.*;
 public record SystemSetRules(List<String> before, List<String> after) {
 
     public SystemSetRules {
+        Objects.requireNonNull(before);
+        Objects.requireNonNull(after);
         before = Collections.unmodifiableList(before);
         after = Collections.unmodifiableList(after);
     }
@@ -14,11 +16,10 @@ public record SystemSetRules(List<String> before, List<String> after) {
     }
 
     public static class Builder {
-        private List<String> before;
-        private List<String> after;
+        private final List<String> before = new ArrayList<>();
+        private final List<String> after = new ArrayList<>();
 
         public Builder before(String label) {
-            if (before == null) before = new ArrayList<>();
             before.add(label);
             return this;
         }
@@ -28,7 +29,6 @@ public record SystemSetRules(List<String> before, List<String> after) {
         }
 
         public Builder after(String label) {
-            if (after == null) after = new ArrayList<>();
             after.add(label);
             return this;
         }
